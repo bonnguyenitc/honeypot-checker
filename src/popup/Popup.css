@@ -15,7 +15,7 @@ h3 {
   font-size: 1.5rem;
   font-weight: 400;
   line-height: 1.2rem;
-  margin: 2rem auto;
+  margin: 1rem auto;
 }
 
 h6 {
@@ -26,7 +26,18 @@ h6 {
 
 .net {
   font-size: 1.3rem;
+  font-weight: 700;
+  color: yellow;
+}
+
+.info-extra {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
   font-weight: 500;
+  font-size: 14px;
 }
 
 @media (min-width: 480px) {

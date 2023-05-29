@@ -45,27 +45,64 @@ const map = new Map()
     const isBSC = net === 'bsc'
     const isEthereum = net === 'ethereum'
     const address = els?.[2]
-    let isHoneypot = true
+    let data = true
     if (map.has(address)) {
-      isHoneypot = map.get(address)
+      data = map.get(address)
     } else {
       if (isBSC || isEthereum) {
-        isHoneypot = await fetch(HONEYPOT_URL + address)
+        data = await fetch(HONEYPOT_URL + address)
           .then((res) => res.json())
           .then((res) => {
-            return res.honeypotResult?.isHoneypot
+            return {
+              isHoneypot: res.honeypotResult?.isHoneypot ?? true,
+              sellTax: res.simulationResult?.sellTax || 0,
+              buyTax: res.simulationResult?.buyTax || 0,
+              holders: res.holderAnalysis?.holders || 0,
+            }
           })
-          .catch(() => true)
+          .catch(() => {
+            return {
+              isHoneypot: true,
+              sellTax: 0,
+              buyTax: 0,
+              holders: 0,
+            }
+          })
       }
-      map.set(address, isHoneypot)
+      map.set(address, data)
     }
-    if (isHoneypot === true || isHoneypot === undefined) {
+    if (data.isHoneypot === true || data.isHoneypot === undefined) {
       element.style.setProperty('opacity', '0.1')
     } else {
       const childElements = element.querySelectorAll('*')
       for (let i = 0; i < childElements.length; i++) {
         if (childElements[i].classList.contains('ds-table-data-cell')) {
           childElements[i].style.setProperty('background-color', '#000 !important')
+          var newChild = document.createElement('div')
+          newChild.classList.add('info-extra')
+          newChild.innerHTML = `
+          <p>Holders: ${data.holders} |
+          SellTax: ${Math.floor(data.sellTax)}% |
+          BuyTax: ${Math.floor(data.buyTax)}%</p>
+          `
+          newChild.style.setProperty('width', '100%')
+          newChild.style.setProperty('display', 'flex')
+          newChild.style.setProperty('justify-content', 'center')
+          newChild.style.setProperty('align-items', 'center')
+          newChild.style.setProperty('margin-top', '10px')
+          newChild.style.setProperty('font-weight', '500')
+          newChild.style.setProperty('font-size', '14px')
+          newChild.style.setProperty('background-color', '#0d2676')
+
+          if (i === 0) {
+            const childElements2 = childElements[0].querySelectorAll('*')
+            let added = false
+            const need = childElements2[childElements2.length - 2]
+            if (need.classList.value.includes('info-extra')) added = true
+            if (added) continue
+            childElements[0].appendChild(newChild)
+            childElements[0].style.setProperty('flex-wrap', 'wrap')
+          }
         }
       }
     }
