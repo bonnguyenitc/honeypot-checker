@@ -3,7 +3,7 @@ import './Popup.css'
 function App() {
   return (
     <main>
-      <h1>Honeypot Checker</h1>
+      <h1>Honeypot Checker on dexscreener</h1>
       <h4>Support</h4>
       <h3 className="net">ETH - BSC</h3>
       <img src="/img/logo-128.png" />

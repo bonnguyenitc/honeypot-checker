@@ -24,6 +24,10 @@ h6 {
   margin: 0.5rem;
 }
 
+h1 {
+  line-height: 1.5em;
+}
+
 .net {
   font-size: 1.3rem;
   font-weight: 700;

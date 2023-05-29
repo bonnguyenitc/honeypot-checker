@@ -1,9 +1,9 @@
 // constants
 const HONEYPOT_URL = 'https://api.honeypot.is/v2/IsHoneypot?address='
-const STAYSAFU_URL = 'https://api.staysafu.org/api/freescan?tokenAddress='
-const ISRUG = function (addr) {
-  return `https://api.isrug.app/tokens/scan?mode=basic&addr=${addr}&chain=arbitrum`
-}
+// const STAYSAFU_URL = 'https://api.staysafu.org/api/freescan?tokenAddress='
+// const ISRUG = function (addr) {
+//   return `https://api.isrug.app/tokens/scan?mode=basic&addr=${addr}&chain=arbitrum`
+// }
 
 // history change
 // Add listener for window location change
@@ -33,6 +33,7 @@ const map = new Map()
     if (listItems.length === 0) {
       listItems = document.querySelectorAll('.ds-dex-table-row')
     }
+    await delay(3000)
   }
 
   for (const element of listItems) {
@@ -81,9 +82,13 @@ const map = new Map()
           var newChild = document.createElement('div')
           newChild.classList.add('info-extra')
           newChild.innerHTML = `
-          <p>Holders: ${data.holders} |
-          SellTax: ${Math.floor(data.sellTax)}% |
-          BuyTax: ${Math.floor(data.buyTax)}%</p>
+          <p>Holders: <span style="background-color:red;font-size:16px;">${data.holders}</span> |
+          SellTax: <span style="background-color:green;font-size:16px;">${Math.floor(
+            data.sellTax,
+          )}%</span> |
+          BuyTax: <span style="background-color:brown;font-size:16px;">${Math.floor(
+            data.buyTax,
+          )}%</span></p>
           `
           newChild.style.setProperty('width', '100%')
           newChild.style.setProperty('display', 'flex')
