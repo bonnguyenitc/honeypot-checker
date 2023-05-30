@@ -74,7 +74,7 @@ const map = new Map()
       map.set(address, data)
     }
     if (data.isHoneypot === true || data.isHoneypot === undefined) {
-      element.style.setProperty('opacity', '0.1')
+      element.style.setProperty('opacity', '1')
     } else {
       const scanLink = isEthereum
         ? `https://etherscan.io/token/${address}`
