@@ -51,6 +51,7 @@ const map = new Map()
       data = map.get(address)
     } else {
       if (isBSC || isEthereum) {
+        await delay(500)
         data = await fetch(HONEYPOT_URL + address)
           .then((res) => res.json())
           .then((res) => {
@@ -75,6 +76,9 @@ const map = new Map()
     if (data.isHoneypot === true || data.isHoneypot === undefined) {
       element.style.setProperty('opacity', '0.1')
     } else {
+      const scanLink = isEthereum
+        ? `https://etherscan.io/token/${address}`
+        : `https://bscscan.com/token/${address}`
       const childElements = element.querySelectorAll('*')
       for (let i = 0; i < childElements.length; i++) {
         if (childElements[i].classList.contains('ds-table-data-cell')) {
@@ -90,6 +94,7 @@ const map = new Map()
             data.buyTax,
           )}%</span></p>
           `
+          // <a href="${scanLink}" target="_blank">${isBSC?'bscscan':'etherscan'}</a>
           newChild.style.setProperty('width', '100%')
           newChild.style.setProperty('display', 'flex')
           newChild.style.setProperty('justify-content', 'center')
@@ -102,8 +107,12 @@ const map = new Map()
           if (i === 0) {
             const childElements2 = childElements[0].querySelectorAll('*')
             let added = false
-            const need = childElements2[childElements2.length - 2]
-            if (need.classList.value.includes('info-extra')) added = true
+            for (const el of childElements2) {
+              if (el.classList.value.includes('info-extra')) {
+                added = true
+                break
+              }
+            }
             if (added) continue
             childElements[0].appendChild(newChild)
             childElements[0].style.setProperty('flex-wrap', 'wrap')
@@ -111,7 +120,6 @@ const map = new Map()
         }
       }
     }
-    await delay(500)
   }
   await delay(3 * 1000)
   await checking()
